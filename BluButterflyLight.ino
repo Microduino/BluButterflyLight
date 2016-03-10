@@ -1,6 +1,5 @@
 #include "key.h"
-#include "JQ6500.h"
-//#include "JQ6500_def.h"
+#include "Microduino_Audio.h"
 #include <SoftwareSerial.h>
 #include <Adafruit_NeoPixel.h>
 #include "audio.h"
@@ -29,16 +28,6 @@ int songs[3][84] = {
  };
 
 
-                
-
-
-
-  ///==========================
-//   int sensor_pin[7]= {
-//   A6,8,10,12,A0,A2,13
-// };
-
-
   int sensor_pin[7]= {
   A6,8,10,12,A0,A2,0
 };
@@ -55,17 +44,15 @@ SoftwareSerial mySerial(4, 5); //RX,TX
 
 #define my_Serial mySerial  //core
 
-void setup()
-{
+void setup() {
   Serial.begin(38400);
-
 
   my_Serial.begin(9600); 
 
-
-  for(int a=0;a<7;a++)
+  for(int a=0;a<7;a++) {
     pinMode(sensor_pin[a],INPUT);
-
+  }
+    
   key_init();
   strip.begin();	//初始化LED
   strip.show(); // Initialize all pixels to 'off'
@@ -74,13 +61,11 @@ void setup()
   delay(500);
   
 
-  for(int a=1;a<8;a++)
-  {
+  for(int a=1;a<8;a++) {
     audio_play(a, 5, 500);
   }
 
-  for(int a=1;a<8;a++)
-  {
+  for(int a=1;a<8;a++) {
     led_off(a, 5);
   }
 
@@ -89,20 +74,13 @@ void setup()
   Serial.println("OK");
 }
 
-void loop() 
-{
-
-
+void loop() {
     int temp;
-    if(millis()>time_play+3000)
-    {
-        if(led_num)
-        {
+    if(millis()>time_play+3000) {
+        if(led_num) {
             led_off(led_num,20);
             led_num = 0;  
-        }
-        else
-        {
+        } else {
           led_num = random(8);
           led_on(led_num,20); 
         }
@@ -118,14 +96,11 @@ void loop()
 
       if(!bleEnable) {
         temp = key_get(sensor_pin[key_num-1], 1);
-        if(temp == 1)
-        {
+        if(temp == 1) {
             led_off(key_num, 5);  
         }
-        else if(temp == 2)
-        {
-            if(led_num)
-            {
+        else if(temp == 2) {
+            if(led_num) {
               led_off(led_num,1);
               led_num = 0;  
             }
